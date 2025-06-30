@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Genre Predictor</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 50px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 50%;
+            margin: auto;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            width: 80%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .results {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Movie Genre Predictor</h2>
+        <input type="text" id="description" placeholder="Enter movie description">
+        <button onclick="predictGenre()">Predict</button>
+        
+        <div class="results">
+            <h3>Extracted Keywords:</h3>
+            <p id="keywords"></p>
+            
+            <h3>Closest Matched Movie (KNN):</h3>
+            <p id="closest_movie"></p>
+            
+            <h3>Top 5 Similar Searched Movies:</h3>
+            <ul id="top_movies"></ul>
+        </div>
+    </div>
+    
+    <script>
+        function predictGenre() {
+            var description = $("#description").val().trim();
+            if (description === "") {
+                alert("Please enter a movie description.");
+                return;
+            }
+            
+            $.post("/predict", { description: description }, function(data) {
+                if (data.error) {
+                    alert("Error: " + data.error);
+                    return;
+                }
+                
+                $("#keywords").text(data.keywords.join(", "));
+                $("#closest_movie").text(data.closest_movie + " (Distance: " + data.distance + ")");
+                
+                var topMoviesList = "";
+                data.top_keyword_movies.forEach(movie => {
+                    topMoviesList += "<li>" + movie + "</li>";
+                });
+                $("#top_movies").html(topMoviesList);
+            }, "json").fail(function() {
+                alert("Failed to fetch prediction. Try again later.");
+            });
+        }
+    </script>
+</body>
+</html>
