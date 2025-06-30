@@ -1,6 +1,6 @@
 # *🧠 Data Science Projects Repository*
 Welcome to my Data Science Repository! This collection showcases a range of projects that demonstrate my skills and experience in data exploration, machine learning, and artificial intelligence. From Exploratory Data Analysis (EDA) to unsupervised learning techniques like clustering, and foundational AI methods such as gradient descent — this repository is designed to reflect real-world problem-solving with data.
-# *🔍 Highlights
+# 🔍 Highlights
 *📊 Exploratory Data Analysis (EDA)*
 Visual and statistical inspection of datasets.
 
@@ -22,7 +22,7 @@ Built simple linear/logistic regression models using gradient-based optimization
 
 Intuition-first explanations supported by code and plots.
 
-#*⚙️ Tools & Technologies
+# ⚙️ Tools & Technologies
 Languages: Python
 
 Libraries: NumPy, Pandas, Matplotlib, Seaborn, Scikit-learn
@@ -32,14 +32,14 @@ Jupyter Notebooks for interactive analysis
 Version Control: Git
 
 
-# *📚 Future Plans
+# 📚 Future Plans
 Add more AI optimization techniques (e.g., Adam, RMSprop).
 
 Include supervised ML projects (classification, regression).
 
 Develop a full pipeline project with deployment.
 
-# *🙌 Acknowledgements
+# 🙌 Acknowledgements
 Special thanks to:
 
 Open-source libraries and Kaggle datasets.
