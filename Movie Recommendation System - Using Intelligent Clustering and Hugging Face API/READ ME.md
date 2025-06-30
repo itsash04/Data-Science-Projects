@@ -1,7 +1,3 @@
-Here’s a detailed and professional `README.md` for your **Multimodal Movie Recommendation System**, structured to impress both academic and developer audiences:
-
----
-
 # 🎬 Movie Recommendation System using Intelligent Clustering and Hugging Face API
 
 ## 📡 Dynamic Clustering Ecosystem Powered by Swarm Intelligence & Hugging Face
@@ -116,5 +112,3 @@ Pull requests and issues are welcome! Please fork the repo and submit your ideas
 If this project helped you, give it a ⭐ to support the effort.
 
 ---
-
-Would you like me to generate the `requirements.txt` or diagrams for the architecture as well?
