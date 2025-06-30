@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clustering Metrics Graphs</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #ffffff;
+            font-family: "Segoe UI", sans-serif;
+            text-align: center;
+        }
+        canvas {
+            margin: 30px auto;
+            max-width: 700px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px #222;
+        }
+        #error {
+            color: #ff5252;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Clustering Performance Over Runs</h1>
+
+    <canvas id="silhouetteChart"></canvas>
+    <canvas id="dbChart"></canvas>
+    <canvas id="ndcgChart"></canvas>
+
+    <div id="error"></div>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch('t.txt');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const text = await response.text();
+                const lines = text.trim().split('\n');
+
+                const run = [], silhouette = [], db = [], ndcg = [];
+
+                lines.forEach((line, index) => {
+                    const values = line.split(',').map(x => x.trim());
+                    if (values.length === 4) {
+                        run.push(parseInt(values[0]));
+                        silhouette.push(parseFloat(values[1]));
+                        db.push(parseFloat(values[2]));
+                        ndcg.push(parseFloat(values[3]));
+                    } else {
+                        console.warn(`Line ${index + 1} skipped (unexpected number of columns): ${line}`);
+                    }
+                });
+
+                return { run, silhouette, db, ndcg };
+
+            } catch (error) {
+                console.error("Error fetching or processing the data:", error);
+                document.getElementById("error").innerText = "An error occurred while loading data. Check console for details.";
+                return { run: [], silhouette: [], db: [], ndcg: [] };
+            }
+        }
+
+        function drawChart(canvasId, label, dataArray, runArray, color) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: runArray,
+                    datasets: [{
+                        label: label,
+                        data: dataArray,
+                        borderColor: color,
+                        backgroundColor: color + '55',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: label
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Run'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        fetchData().then(data => {
+            if (data.run.length > 0) {
+                drawChart('silhouetteChart', 'Silhouette Score', data.silhouette, data.run, '#4caf50');
+                drawChart('dbChart', 'Davies-Bouldin Index', data.db, data.run, '#ff5722');
+                drawChart('ndcgChart', 'NDCG Score', data.ndcg, data.run, '#2196f3');
+            }
+        });
+    </script>
+
+</body>
+</html>
